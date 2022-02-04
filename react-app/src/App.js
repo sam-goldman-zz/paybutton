@@ -1,7 +1,7 @@
 import './App.css';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
-// import { Hop, Chain } from '@hop-protocol/sdk';
+import { Hop, Chain } from '@hop-protocol/sdk';
 
 // const hop = new Hop('mainnet');
 
