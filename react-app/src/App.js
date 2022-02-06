@@ -1,20 +1,18 @@
 import './App.css';
 import { ethers } from 'ethers';
 import { useState, useEffect } from 'react';
-import { Hop, Chain } from '@hop-protocol/sdk';
-
-// const hop = new Hop('mainnet');
+import { Hop, Chain, CanonicalToken } from '@hop-protocol/sdk';
 
 function App() {
-  const [value, setValue] = useState();
-  const [address, setAccount] = useState();
+  const [value, setValue] = useState("");
+  const [address, setAddress] = useState();
   const [currency, setCurrency] = useState('MATIC');
 
   useEffect(() => {
     const getInitialConnection = async () => {
       const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
       const account = accounts[0];
-      setAccount(account);
+      setAddress(account);
     }
 
     getInitialConnection();
@@ -24,24 +22,23 @@ function App() {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
 
-    // const bridge = hop.connect(signer).bridge('USDC');
+    const hop = new Hop('mainnet', signer);
+    const bridge = hop.connect(signer).bridge(CanonicalToken.MATIC);
 
-    // send 100 USDC tokens from Polygon -> xDai
-    // const tx = await bridge.send('100000000', Chain.Polygon, Chain.xDai)
-    // console.log(tx.hash)
-    // contract = new ethers.Contract(contractAddress, Token.abi, signer);
+    // const valueWei = ethers.utils.parseEther(value);
+    const tx = await bridge.send((10**19).toString(), Chain.Polygon, Chain.Gnosis);
+    console.log(tx.hash)
 
-    const valueHexString = new ethers.utils.parseEther(value).toHexString();
-    const transactionParameters = {
-      to: '0x1A3DAA6F487A480c1aD312b90FD0244871940b66', // Required except during contract publications.
-      from: address, // must match user's active address.
-      value: valueHexString, // Only required to send ether to the recipient from the initiating external account.
-    };
+    // const transactionParameters = {
+    //   to: '0x1A3DAA6F487A480c1aD312b90FD0244871940b66', // Required except during contract publications.
+    //   from: address, // must match user's active address.
+    //   value: valueHexString, // Only required to send ether to the recipient from the initiating external account.
+    // };
     
-    const txHash = await window.ethereum.request({
-      method: 'eth_sendTransaction',
-      params: [transactionParameters],
-    });
+    // const txHash = await window.ethereum.request({
+    //   method: 'eth_sendTransaction',
+    //   params: [transactionParameters],
+    // });
   }
 
   const handleInputChange = (e) => {

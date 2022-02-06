@@ -1,3 +1,6 @@
+a
+const a = ethers.utils.parseEther('1');
+ethers.utils.parseEther('1');
 new ethers.utils.parseEther('3').toHexString();
 new ethers.utils.parseEther('3')
 new ethers.BigNumber.from('3').toHexString();
